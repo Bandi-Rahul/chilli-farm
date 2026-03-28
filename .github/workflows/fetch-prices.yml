@@ -1,0 +1,53 @@
+name: 🌶 Daily Chilli Price Fetch
+
+on:
+  schedule:
+    # Runs at 3:00 AM UTC = 8:30 AM IST (before Karnataka APMC markets open)
+    # Also runs at 10:00 AM UTC = 3:30 PM IST (after market prices are published)
+    - cron: '0 3 * * *'
+    - cron: '0 10 * * *'
+  workflow_dispatch:   # Allow manual trigger from GitHub Actions tab
+
+permissions:
+  contents: write      # Needed to commit live-prices.json
+
+jobs:
+  fetch-prices:
+    runs-on: ubuntu-latest
+    name: Fetch Live APMC Prices
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install dependencies
+        run: |
+          pip install requests beautifulsoup4 lxml
+
+      - name: 🌐 Fetch prices from KRAMA & Agmarknet
+        run: |
+          cd scraper
+          python fetch_krama.py
+
+      - name: 📋 Show fetched data
+        run: |
+          echo "=== Live Prices JSON ==="
+          cat data/live-prices.json
+
+      - name: 💾 Commit and push if data changed
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/live-prices.json
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No price changes detected — skipping commit"
+          else
+            git commit -m "📊 Auto-update: Live APMC chilli prices $(date '+%Y-%m-%d %H:%M IST')"
+            git push
+          fi

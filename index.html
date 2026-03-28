@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌶 Chilli Farm Dashboard — Ballari, Karnataka</title>
+<meta name="description" content="Live APMC chilli prices, profit calculator and 5-year price charts for Syngenta 2043 and 5531 farmers in Ballari, Karnataka.">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="data/prices.js"></script>
+<style>
+.hero-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.hero-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:14px 16px;color:#fff;text-align:center}
+.hero-card .hv{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:#C8E6C9}
+.hero-card .hl{font-size:11px;opacity:.7;margin-top:4px}
+.market-row{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #EEE;font-size:13px}
+.market-row:last-child{border-bottom:none}
+.market-name{font-weight:700}.market-dist{font-size:11px;color:var(--ink-soft)}
+.pb{font-family:'JetBrains Mono',monospace;font-weight:700;padding:4px 10px;border-radius:6px;font-size:13px}
+.pb-g{background:var(--green-light);color:var(--green-dark)}.pb-a{background:var(--amber-light);color:#7D6608}.pb-r{background:var(--red-light);color:var(--red)}
+.nav-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:20px}
+.nav-card{background:var(--white);border-radius:12px;box-shadow:var(--shadow);padding:18px;border-top:4px solid;text-decoration:none;color:var(--ink);transition:transform .2s,box-shadow .2s;display:block}
+.nav-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.nav-card.green{border-top-color:var(--green-dark)}.nav-card.orange{border-top-color:var(--orange)}.nav-card.teal{border-top-color:var(--teal)}
+.nc-icon{font-size:30px;margin-bottom:8px}.nc-title{font-weight:900;font-size:15px;margin-bottom:4px}.nc-desc{font-size:12px;color:var(--ink-soft);line-height:1.5}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-logo"><span>🌶</span> ChilliFarm Ballari</a>
+    <nav class="site-nav">
+      <a href="index.html" class="active">Dashboard</a>
+      <a href="charts.html">Price Charts</a>
+      <a href="calculator.html">Profit Calculator</a>
+    </nav>
+  </div>
+</header>
+
+<div class="live-ticker">
+  <div class="live-dot"></div>
+  <span class="ticker-label">APMC</span>
+  <span class="ticker-item">Sindhanur: <span class="ticker-price" id="t-sindhanur">—</span></span>
+  <span class="ticker-item">Hubli: <span class="ticker-price" id="t-hubli">—</span></span>
+  <span class="ticker-item">2043: <span class="ticker-price" id="t-2043">—</span></span>
+  <span class="ticker-item">5531: <span class="ticker-price" id="t-5531">—</span></span>
+  <span class="ticker-updated" id="t-updated">Loading…</span>
+</div>
+
+<div class="page-hero">
+  <div class="hero-badge">🌶 Ballari District, Karnataka · Kharif 2026–27</div>
+  <h1>Chilli Farmer Dashboard</h1>
+  <p>Live APMC prices · 5-year price charts · Profit calculator for Syngenta 2043 &amp; 5531</p>
+  <div class="hero-grid">
+    <div class="hero-card"><div class="hv" id="h-hybrid">₹13,300</div><div class="hl">Hybrid Modal (Sindhanur)</div></div>
+    <div class="hero-card"><div class="hv" id="h-byadgi">₹27,501</div><div class="hl">Byadgi Premium (Hubli)</div></div>
+    <div class="hero-card"><div class="hv" id="h-trend">📉 Declining</div><div class="hl">Market Trend</div></div>
+    <div class="hero-card"><div class="hv">Jan 2027</div><div class="hl">Best Predicted Sell Window</div></div>
+  </div>
+</div>
+
+<div class="container"><div class="content">
+
+<div class="nav-cards">
+  <a href="charts.html" class="nav-card green"><div class="nc-icon">📈</div><div class="nc-title">5-Year Price Charts</div><div class="nc-desc">Quarterly history (2021–2026) for 2043 &amp; 5531 with all verified APMC anchors.</div></a>
+  <a href="calculator.html" class="nav-card orange"><div class="nc-icon">🧮</div><div class="nc-title">Profit Calculator</div><div class="nc-desc">Enter farm size, costs, yield, price — instantly see your profit or loss.</div></a>
+  <a href="https://krama.karnataka.gov.in" target="_blank" rel="noopener" class="nav-card teal"><div class="nc-icon">🏛️</div><div class="nc-title">KRAMA Portal</div><div class="nc-desc">Karnataka government APMC prices. Check before selling.</div></a>
+</div>
+
+<div class="card">
+  <div class="card-header green"><span class="icon">📡</span><h2>Live Market Prices — Karnataka APMC</h2><span class="sub" id="live-src-badge">Loading…</span></div>
+  <div class="card-body">
+    <div id="live-status" style="font-size:12.5px;color:var(--ink-soft);margin-bottom:12px">⏳ Fetching live prices…</div>
+    <div id="market-list"></div>
+    <div class="callout amber" style="margin-top:14px;font-size:13px">
+      <strong>💡 For 2043 &amp; 5531:</strong> These hybrid varieties trade mainly at <strong>Sindhanur APMC</strong> (Raichur, near Ballari). Hubli/Byadgi prices reflect premium GI varieties and are NOT your expected price — but indicate market direction.
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header orange"><span class="icon">🌶</span><h2>Today's Estimated Price — Your Varieties</h2></div>
+  <div class="card-body">
+    <div class="stat-grid" style="margin-bottom:14px">
+      <div class="stat-card orange"><div class="sc-label">Syngenta 2043</div><div class="sc-val" id="est-2043">₹13,300</div><div class="sc-sub">Oleoresin / Colour</div></div>
+      <div class="stat-card teal"><div class="sc-label">Syngenta 5531</div><div class="sc-val" id="est-5531">₹14,200</div><div class="sc-sub">Colour + Pungency</div></div>
+      <div class="stat-card green"><div class="sc-label">Breakeven Price</div><div class="sc-val">₹6,000</div><div class="sc-sub">At 15 qtl/acre, ₹90K cost</div></div>
+      <div class="stat-card amber"><div class="sc-label">Good Return Min.</div><div class="sc-val">₹14,000</div><div class="sc-sub">Remunerative threshold</div></div>
+    </div>
+    <div class="callout green" style="font-size:13px">
+      <strong>📊 Next year prediction (Jan–Mar 2027):</strong>
+      2043 → <strong>₹16,000–22,000/Q</strong> &nbsp;|&nbsp; 5531 → <strong>₹17,000–24,000/Q</strong> (base case, 55% probability).
+      <a href="charts.html" style="color:var(--green-dark);font-weight:700;margin-left:4px">See full analysis →</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header blue"><span class="icon">💡</span><h2>Tips for Best Price</h2></div>
+  <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="callout green" style="font-size:13px">🏪 <strong>Sell at Hubli Amaragol</strong> — ₹5K–10K more per quintal vs Sindhanur.</div>
+    <div class="callout amber" style="font-size:13px">📅 <strong>Best month: January</strong> — Sell 40–50% of crop. Peak processor demand.</div>
+    <div class="callout orange" style="font-size:13px">❄️ <strong>Cold storage</strong> — Price below ₹14K? Wait 2–3 months. Cost: ₹1,000–2,000/Q.</div>
+    <div class="callout green" style="font-size:13px">🌿 <strong>Dry to 8–10% moisture</strong> — Good sorting adds ₹5K–8K per quintal premium.</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header teal"><span class="icon">🔗</span><h2>Useful Links</h2></div>
+  <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px">
+    <a href="https://krama.karnataka.gov.in/MainPage/DailyMrktPriceRep2?Rep=Com&CommCode=132&VarCode=1&CommName=Dry+Chillies&VarName=Byadgi" target="_blank" rel="noopener" style="background:var(--green-light);color:var(--green-dark);padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;border:1.5px solid var(--green-med)">📊 KRAMA Daily Prices</a>
+    <a href="https://krama.karnataka.gov.in/krishi_dashboard" target="_blank" rel="noopener" style="background:var(--blue-light);color:var(--blue-dark);padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;border:1.5px solid #90CAF9">🌾 KRAMA Dashboard</a>
+    <a href="https://agmarknet.gov.in" target="_blank" rel="noopener" style="background:var(--orange-light);color:var(--orange);padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;border:1.5px solid #FABB7A">🏛️ Agmarknet India</a>
+    <a href="calculator.html" style="background:var(--green-dark);color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px">🧮 Profit Calculator</a>
+    <a href="charts.html" style="background:var(--orange);color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px">📈 Price Charts</a>
+  </div>
+</div>
+
+</div></div>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div><h3>🌶 ChilliFarm Ballari</h3>Built for chilli farmers in Ballari, Karnataka. Syngenta 2043 &amp; 5531.<br><br>Prices fetched live from Agmarknet and updated daily via GitHub Actions from KRAMA portal.</div>
+    <div><h3>Data Sources</h3>• <a href="https://krama.karnataka.gov.in" target="_blank" rel="noopener">KRAMA Karnataka</a><br>• <a href="https://agmarknet.gov.in" target="_blank" rel="noopener">Agmarknet / data.gov.in</a><br>• SpiceExtra Karnataka Reports<br>• PJTAU Vanakalam Forecast · UAS Raichur</div>
+  </div>
+  <div class="footer-copy">Made with ❤️ for a Ballari chilli farmer &nbsp;|&nbsp; March 2026</div>
+</footer>
+
+<script src="assets/js/live-data.js"></script>
+<script>
+const fmt = n => n ? "₹" + Number(n).toLocaleString("en-IN") : "—";
+
+function renderDashboard(data) {
+  const ve = data.variety_estimates || {}, s = data.summary || {}, mkt = data.markets || [];
+  renderTicker(data);
+  const sindh = mkt.find(m => m.market.toLowerCase().includes("sindhanur"))?.modal_price;
+  const hubli  = mkt.find(m => m.market.toLowerCase().includes("hubli"))?.modal_price;
+  const trendMap = {rising:"📈 Rising",stable:"→ Stable",declining:"📉 Declining",very_low:"⚠️ Very Low"};
+  const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
+  set("h-hybrid", sindh ? "₹"+(sindh/1000).toFixed(1)+"K" : "₹13.3K");
+  set("h-byadgi",  hubli ? "₹"+(hubli/1000).toFixed(1)+"K"  : "₹27.5K");
+  set("h-trend", trendMap[s.trend] || "→ Stable");
+  set("est-2043", fmt(ve.syngenta_2043?.estimated_modal));
+  set("est-5531", fmt(ve.syngenta_5531?.estimated_modal));
+  set("live-src-badge", data.source_label || "Data");
+  const statusMap = {live_agmarknet:"✅ Live from Agmarknet API",live:"✅ Live from GitHub cache",embedded_seed:"📋 Seed data (Mar 2026) — live fetch in background",fallback:"⚠️ Cached — live fetch unavailable"};
+  const statusEl = document.getElementById("live-status");
+  if(statusEl) statusEl.innerHTML = `${statusMap[data.fetch_status]||"📋 Data loaded"} &nbsp;·&nbsp; Last updated: <strong>${data.last_updated}</strong>`;
+  const listEl = document.getElementById("market-list");
+  if(listEl && mkt.length) listEl.innerHTML = mkt.map(m => {
+    const cls = m.modal_price>18000?"pb-g":m.modal_price>13000?"pb-a":"pb-r";
+    return `<div class="market-row">
+      <div><div class="market-name">${m.market}</div><div class="market-dist">${m.district} · ${m.variety} · ${m.date} · <em>${m.source}</em></div></div>
+      <div style="font-size:12px">Min: <strong>${fmt(m.min_price)}</strong></div>
+      <span class="pb ${cls}">Modal ${fmt(m.modal_price)}</span>
+      <div style="font-size:12px">Max: <strong>${fmt(m.max_price)}</strong></div>
+    </div>`;
+  }).join("");
+}
+
+// Show seed data instantly
+renderDashboard({...window.CHILLI_PRICES, fetch_status:"embedded_seed", source_label:"Seed data (live loading…)"});
+// Then upgrade with live data
+loadLiveData().then(renderDashboard).catch(console.error);
+</script>
+</body>
+</html>

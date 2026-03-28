@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧮 Profit Calculator — Syngenta 2043 & 5531 | ChilliFarm Ballari</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="data/prices.js"></script>
+<style>
+.total-bar{background:var(--green-light);border-radius:8px;padding:12px 16px;margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.total-bar-label{font-weight:800;font-size:15px;color:var(--green-dark)}
+.total-bar-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--green-dark)}
+.result-profit{background:var(--green-light);border:2px solid var(--green-med);border-radius:10px;padding:14px 16px;grid-column:1/-1}
+.result-profit .rc-val{font-size:36px;color:var(--green-dark)}
+.profit-status{display:inline-flex;align-items:center;gap:6px;background:var(--white);border-radius:100px;padding:4px 14px;font-size:13px;font-weight:800;margin-top:8px}
+.ps-ok{color:var(--green-dark);border:2px solid var(--green-med)}
+.ps-warn{color:var(--orange);border:2px solid var(--amber)}
+.ps-loss{color:var(--red);border:2px solid var(--red)}
+.meter-bar{height:16px;background:#EEE;border-radius:100px;overflow:hidden;margin:8px 0}
+.meter-fill{height:100%;border-radius:100px;transition:width .5s,background .3s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;min-width:3px}
+.mfl{font-size:9px;font-weight:700;color:#fff}
+.per-acre-bar{background:var(--amber-light);border-radius:8px;padding:10px 14px;font-size:13px;color:#5D4037;margin-top:8px}
+.sc-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:8px;padding:8px 0;border-bottom:1px solid #EEE;font-size:13px;align-items:center}
+.sc-row:last-child{border-bottom:none}
+.sc-row.hdr{font-weight:800;font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.5px;padding-bottom:6px}
+.sc-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px}
+.st-worst{background:var(--red-light);color:var(--red)}.st-poor{background:var(--orange-light);color:#D35400}
+.st-base{background:var(--green-light);color:var(--green-dark)}.st-good{background:var(--blue-light);color:var(--blue-dark)}.st-bull{background:#E8DAEF;color:#6C3483}
+.curr-row{background:#FFFACD}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-logo"><span>🌶</span> ChilliFarm Ballari</a>
+    <nav class="site-nav">
+      <a href="index.html">Dashboard</a>
+      <a href="charts.html">Price Charts</a>
+      <a href="calculator.html" class="active">Profit Calculator</a>
+    </nav>
+  </div>
+</header>
+
+<div class="live-ticker">
+  <div class="live-dot"></div>
+  <span class="ticker-label">LIVE</span>
+  <span class="ticker-item">2043: <span class="ticker-price" id="t-2043">—</span></span>
+  <span class="ticker-item">5531: <span class="ticker-price" id="t-5531">—</span></span>
+  <span class="ticker-item">Sindhanur: <span class="ticker-price" id="t-sindhanur">—</span></span>
+  <span class="ticker-updated" id="t-updated">Loading…</span>
+</div>
+
+<div class="page-hero">
+  <div class="hero-badge">🧮 Farmer-Friendly Calculator</div>
+  <h1>Chilli Profit Calculator</h1>
+  <p>Enter your numbers in the YELLOW boxes — profit calculates instantly | Syngenta 2043 &amp; 5531</p>
+</div>
+
+<div class="container"><div class="content">
+
+<div class="callout amber" style="margin-bottom:18px;font-size:13.5px">
+  📝 <strong>How to use:</strong> Change only the <span style="background:var(--input-bg);border:2px solid var(--input-gold);border-radius:4px;padding:1px 7px;font-family:'JetBrains Mono',monospace;font-size:11px">YELLOW</span> input boxes with YOUR actual numbers. All results calculate automatically.
+</div>
+
+<!-- A: FARM DETAILS -->
+<div class="card">
+  <div class="card-header green"><span class="icon">🌱</span><h2>A — Your Farm Details</h2></div>
+  <div class="card-body">
+    <div class="input-row">
+      <div><div class="input-label">How many acres do you farm?</div><div class="input-hint">1 acre = 0.4 hectare. Enter 0.5, 1, 1.5, 2 etc.</div></div>
+      <div class="input-right"><input type="number" id="acres" value="1" min="0.5" max="200" step="0.5" style="width:90px;padding-left:10px"><span class="unit-label">Acres</span></div>
+    </div>
+    <div class="input-row">
+      <div><div class="input-label">Which variety are you growing?</div><div class="input-hint">2043 = High colour / oleoresin. 5531 = Colour + pungency / masala.</div></div>
+      <div class="input-right"><select id="variety"><option value="2043">Syngenta 2043</option><option value="5531">Syngenta 5531</option></select></div>
+    </div>
+  </div>
+</div>
+
+<!-- B: COSTS -->
+<div class="card">
+  <div class="card-header blue"><span class="icon">💰</span><h2>B — Your Farming Costs (per acre)</h2><span class="sub">Change to YOUR actual costs</span></div>
+  <div class="card-body">
+    <div class="callout amber" style="margin-bottom:14px;font-size:12.5px">💡 Defaults are typical Ballari averages. Change them to what <strong>you actually spent</strong>.</div>
+    <div id="cost-rows"></div>
+    <div class="total-bar"><span class="total-bar-label">📊 TOTAL COST — YOUR FARM</span><span class="total-bar-val" id="display-total">₹0</span></div>
+  </div>
+</div>
+
+<!-- C: YIELD & PRICE -->
+<div class="card">
+  <div class="card-header orange"><span class="icon">🌶</span><h2>C — Expected Yield &amp; Selling Price</h2></div>
+  <div class="card-body">
+    <div class="input-row">
+      <div><div class="input-label">Expected Yield (quintals per acre)</div><div class="input-hint">1 quintal = 100 kg dry chilli. Irrigated: typical 12–20 qtl/acre.</div></div>
+      <div class="input-right"><input type="number" id="yield-pa" value="16" min="1" max="50" step="0.5" style="padding-left:10px"><span class="unit-label">Qtl/acre</span><span class="typical-tag">Typical: 12–20</span></div>
+    </div>
+    <div class="input-row">
+      <div><div class="input-label">Expected Selling Price (₹ per quintal)</div><div class="input-hint">Price at APMC mandi when you sell. Check KRAMA portal for daily live prices.</div></div>
+      <div class="input-right"><div class="inp-wrap"><span class="inp-prefix">₹</span><input type="number" id="price-pq" value="19000" min="1000" max="200000" step="500"></div><span class="unit-label">/quintal</span><span class="typical-tag" id="price-tag">Base: ₹16K–22K</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- D: RESULTS -->
+<div class="card">
+  <div class="card-header green"><span class="icon">✅</span><h2>D — Your Profit / Loss Result</h2><span class="sub">Auto-calculated</span></div>
+  <div class="card-body">
+    <div class="result-grid">
+      <div class="result-card" style="background:var(--blue-light);border-color:#AED6F1"><div class="rc-label">💵 Gross Revenue</div><div class="rc-val" id="d-rev">₹0</div><div class="rc-sub" id="d-rev-sub">0 qtl × ₹0</div></div>
+      <div class="result-card" style="background:var(--orange-light);border-color:#FABB7A"><div class="rc-label">📦 Total Cost</div><div class="rc-val" id="d-cost">₹0</div><div class="rc-sub" id="d-cost-sub">All inputs</div></div>
+      <div class="result-card" style="background:var(--amber-light);border-color:#FFD54F"><div class="rc-label">📈 ROI %</div><div class="rc-val" id="d-roi">0%</div><div class="rc-sub">Return on investment</div></div>
+      <div class="result-card" style="background:#F3E5F5;border-color:#CE93D8"><div class="rc-label">⚖️ Breakeven Price</div><div class="rc-val" id="d-bkevn">₹0/Q</div><div class="rc-sub">Min price to not lose</div></div>
+      <div class="result-profit result-card"><div class="rc-label">🌶 NET PROFIT / LOSS — YOUR FARM</div><div class="rc-val" id="d-profit">₹0</div><div class="rc-sub" id="d-profit-sub">Based on your inputs</div><div id="profit-badge"></div></div>
+    </div>
+    <div style="margin-top:10px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--ink-soft);margin-bottom:3px"><span>Cost</span><span>Revenue vs Cost</span><span>Revenue</span></div>
+      <div class="meter-bar"><div class="meter-fill" id="meter"><span class="mfl" id="meter-txt"></span></div></div>
+    </div>
+    <div class="per-acre-bar"><strong>Per Acre:</strong> Revenue: <strong id="rpa">₹0</strong> &nbsp;|&nbsp; Cost: <strong id="cpa">₹0</strong> &nbsp;|&nbsp; Profit: <strong id="ppa">₹0</strong></div>
+  </div>
+</div>
+
+<!-- E: SCENARIOS -->
+<div class="card">
+  <div class="card-header" style="background:#4A235B"><span class="icon">📊</span><h2>E — 2026–27 Price Scenarios (Planning Reference)</h2></div>
+  <div class="card-body">
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:12px">Pre-set prediction scenarios. Your current input is highlighted in <span style="background:#FFFACD;padding:1px 5px;border-radius:3px;font-weight:700">yellow</span>. Cost assumed ₹90,000/acre.</p>
+    <div class="sc-row hdr"><div>Scenario</div><div>Price/Q</div><div>Yield/acre</div><div>Revenue (farm)</div><div>Net Profit (farm)</div></div>
+    <div id="scenario-rows"></div>
+  </div>
+</div>
+
+<!-- F: TIPS -->
+<div class="card">
+  <div class="card-header green"><span class="icon">💡</span><h2>F — Tips for Best Price</h2></div>
+  <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+    <div class="callout green" style="font-size:13px">🏪 <strong>Sell at Hubli Amaragol APMC</strong> — ₹5,000–10,000 more per quintal vs Sindhanur. Transport: ₹500–800/Q. Worth it for 10+ quintals.</div>
+    <div class="callout amber" style="font-size:13px">📅 <strong>Best window: January 2027</strong> — Sell 40–50% in January. Peak processor demand before Rabi stock arrives.</div>
+    <div class="callout orange" style="font-size:13px">❄️ <strong>Cold storage saves money</strong> — If price below ₹14,000/Q, store 2–3 months. Cost: ₹1,000–2,000/Q. Can gain ₹3,000–8,000 extra later.</div>
+    <div class="callout green" style="font-size:13px">🌿 <strong>Quality = Higher Price</strong> — Harvest red-ripe, sun-dry to 8–10% moisture. Quality 2043 gets ₹5,000–8,000 extra per quintal.</div>
+    <div class="callout amber" style="font-size:13px">📱 <strong>Check KRAMA daily</strong> — Visit krama.karnataka.gov.in before deciding to sell. Don't trust trader's word alone.</div>
+  </div>
+</div>
+
+</div></div>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div><h3>🌶 ChilliFarm Ballari</h3>Built for chilli farmers in Ballari, Karnataka. Syngenta 2043 &amp; 5531. Prices updated daily from KRAMA portal.</div>
+    <div><h3>Quick Links</h3><a href="index.html">Dashboard</a> · <a href="charts.html">Price Charts</a><br><a href="https://krama.karnataka.gov.in" target="_blank" rel="noopener">KRAMA Portal</a> · <a href="https://agmarknet.gov.in" target="_blank" rel="noopener">Agmarknet</a></div>
+  </div>
+  <div class="footer-copy">Made with ❤️ for a Ballari chilli farmer | March 2026</div>
+</footer>
+
+<script src="assets/js/live-data.js"></script>
+<script>
+const costData = {
+  "2043":[
+    {label:"Land Preparation",hint:"Ploughing + FYM + levelling",val:8300,typical:"₹7K–10K"},
+    {label:"Seeds / Seedlings",hint:"Syngenta 2043 seed packet",val:6000,typical:"₹5K–7K"},
+    {label:"Fertilizers",hint:"DAP, Urea, Potash, Micronutrients",val:7500,typical:"₹6.5K–9K"},
+    {label:"Pesticides & Sprays",hint:"Insecticides + fungicides (full season)",val:8000,typical:"₹6K–10K"},
+    {label:"Irrigation",hint:"Drip system yearly share + electricity/water",val:14500,typical:"₹12K–17K"},
+    {label:"Labour",hint:"Transplanting + weeding + all harvesting",val:28300,typical:"₹24K–33K"},
+    {label:"Tractor / Machinery",hint:"Tractor hire + sprayer hire",val:4500,typical:"₹3.5K–6K"},
+    {label:"Bags, Transport, Insurance",hint:"Bags + truck to APMC + PMFBY premium",val:10200,typical:"₹8K–12.5K"},
+  ],
+  "5531":[
+    {label:"Land Preparation",hint:"Ploughing + FYM + levelling",val:8300,typical:"₹7K–10K"},
+    {label:"Seeds / Seedlings",hint:"Syngenta 5531 seed packet",val:5800,typical:"₹5K–7K"},
+    {label:"Fertilizers",hint:"DAP, Urea, Potash, Micronutrients",val:7500,typical:"₹6.5K–9K"},
+    {label:"Pesticides & Sprays",hint:"Insecticides + fungicides (full season)",val:7500,typical:"₹6K–10K"},
+    {label:"Irrigation",hint:"Drip system yearly share + electricity/water",val:14500,typical:"₹12K–17K"},
+    {label:"Labour",hint:"Transplanting + weeding + all harvesting",val:28300,typical:"₹24K–33K"},
+    {label:"Tractor / Machinery",hint:"Tractor hire + sprayer hire",val:4500,typical:"₹3.5K–6K"},
+    {label:"Bags, Transport, Insurance",hint:"Bags + truck to APMC + PMFBY premium",val:10200,typical:"₹8K–12.5K"},
+  ]
+};
+
+const scenarios = {
+  "2043":[{n:"😟 Worst",cls:"st-worst",p:8000,y:12},{n:"😐 Poor",cls:"st-poor",p:12000,y:14},{n:"📊 Base",cls:"st-base",p:19000,y:16},{n:"⭐ Good",cls:"st-good",p:24000,y:20},{n:"🐂 Bull",cls:"st-bull",p:30000,y:22}],
+  "5531":[{n:"😟 Worst",cls:"st-worst",p:9000,y:11},{n:"😐 Poor",cls:"st-poor",p:13500,y:13},{n:"📊 Base",cls:"st-base",p:21000,y:15},{n:"⭐ Good",cls:"st-good",p:26000,y:18},{n:"🐂 Bull",cls:"st-bull",p:32000,y:20}]
+};
+
+let costVals = [];
+const fmtI = n => "₹" + Math.round(n).toLocaleString("en-IN");
+
+function buildCosts(variety) {
+  const rows = document.getElementById("cost-rows");
+  rows.innerHTML = "";
+  costVals = [];
+  costData[variety].forEach((item, i) => {
+    costVals.push(item.val);
+    const row = document.createElement("div");
+    row.className = "input-row";
+    row.innerHTML = `
+      <div><div class="input-label">${item.label}</div><div class="input-hint">${item.hint}</div></div>
+      <div class="input-right">
+        <div class="inp-wrap"><span class="inp-prefix">₹</span><input type="number" class="ci" data-i="${i}" value="${item.val}" min="0" max="500000" step="100"></div>
+        <span class="unit-label">/acre</span>
+        <span class="typical-tag">${item.typical}</span>
+      </div>`;
+    rows.appendChild(row);
+  });
+  rows.querySelectorAll(".ci").forEach(inp => {
+    inp.addEventListener("input", () => { costVals[+inp.dataset.i] = +inp.value||0; calc(); });
+  });
+}
+
+function buildScenarios(variety, acres, curPrice, curYield) {
+  const scs = scenarios[variety], costPA = 90000;
+  const container = document.getElementById("scenario-rows");
+  container.innerHTML = "";
+  scs.forEach(sc => {
+    const rev = sc.p*sc.y*acres, prof = rev-costPA*acres;
+    const isCur = sc.p===curPrice && sc.y===curYield;
+    const pc = prof>0?"#1E8449":"#C0392B";
+    const row = document.createElement("div");
+    row.className = "sc-row" + (isCur?" curr-row":"");
+    row.innerHTML = `
+      <div><span class="sc-tag ${sc.cls}">${sc.n}</span>${isCur?' <span style="font-size:10px;color:var(--amber);font-weight:700">← Your input</span>':""}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-weight:700">₹${sc.p.toLocaleString("en-IN")}</div>
+      <div>${sc.y} qtl</div>
+      <div style="font-family:'JetBrains Mono',monospace;color:#1A3A6B">${fmtI(rev)}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${pc}">${fmtI(prof)}</div>`;
+    container.appendChild(row);
+  });
+}
+
+function calc() {
+  const acres=+document.getElementById("acres").value||1;
+  const yieldPA=+document.getElementById("yield-pa").value||0;
+  const price=+document.getElementById("price-pq").value||0;
+  const variety=document.getElementById("variety").value;
+  const costPA=costVals.reduce((a,b)=>a+b,0);
+  const total=costPA*acres, totY=yieldPA*acres;
+  const rev=totY*price, profit=rev-total;
+  const roi=total>0?(profit/total*100):0;
+  const bkevn=totY>0?total/totY:0;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set("display-total",fmtI(total));
+  set("d-rev",fmtI(rev));
+  set("d-rev-sub",`${totY.toFixed(1)} qtl × ${fmtI(price)}`);
+  set("d-cost",fmtI(total));
+  set("d-cost-sub",`${acres} acre × ${fmtI(costPA)}/acre`);
+  set("d-roi",roi.toFixed(1)+"%");
+  set("d-bkevn",fmtI(bkevn)+"/Q");
+  set("d-profit",fmtI(profit));
+  set("d-profit-sub",`${acres} acre · ${yieldPA} qtl/acre · ${fmtI(price)}/Q`);
+  set("rpa",fmtI(rev/acres)); set("cpa",fmtI(costPA)); set("ppa",fmtI(profit/acres));
+
+  const profEl=document.querySelector(".result-profit");
+  const profVal=document.getElementById("d-profit");
+  if(profit>0){profEl.style.background="var(--green-light)";profEl.style.borderColor="var(--green-med)";profVal.style.color="var(--green-dark)";}
+  else if(profit<0){profEl.style.background="var(--red-light)";profEl.style.borderColor="var(--red)";profVal.style.color="var(--red)";}
+  else{profEl.style.background="var(--amber-light)";profEl.style.borderColor="var(--amber)";profVal.style.color="var(--amber)";}
+
+  document.getElementById("profit-badge").innerHTML = profit>0
+    ? '<div class="profit-status ps-ok">✅ PROFIT — You are making money!</div>'
+    : profit===0 ? '<div class="profit-status ps-warn">⚖️ BREAKEVEN — No profit, no loss</div>'
+    : '<div class="profit-status ps-loss">❌ LOSS — Review your numbers</div>';
+
+  const maxV=Math.max(rev,total)*1.1||1, pct=Math.min(rev/maxV*100,100);
+  const m=document.getElementById("meter");
+  m.style.width=pct+"%";
+  m.style.background=profit>0?"linear-gradient(90deg,#2E8B44,#1A5C2A)":profit===0?"var(--amber)":"var(--red)";
+  document.getElementById("meter-txt").textContent=profit>0?"▲ Profit":profit<0?"▼ Loss":"=";
+  document.getElementById("price-tag").textContent=variety==="2043"?"Base: ₹16K–22K":"Base: ₹17K–24K";
+  buildScenarios(variety,acres,price,yieldPA);
+}
+
+document.getElementById("variety").addEventListener("change",function(){buildCosts(this.value);calc();});
+document.getElementById("acres").addEventListener("input",calc);
+document.getElementById("yield-pa").addEventListener("input",calc);
+document.getElementById("price-pq").addEventListener("input",calc);
+buildCosts("2043");
+calc();
+
+// Show seed data in ticker immediately, then upgrade with live
+renderTicker({...window.CHILLI_PRICES, fetch_status:"embedded_seed", source_label:"Seed data"});
+loadLiveData().then(renderTicker).catch(console.error);
+</script>
+</body>
+</html>

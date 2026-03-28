@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📈 5-Year Price Charts — Syngenta 2043 & 5531 | ChilliFarm Ballari</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="data/prices.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="assets/js/chart-data.js"></script>
+<style>
+.split-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}
+.anchor-banner{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0;justify-content:center}
+.ap{background:var(--white);border:1.5px solid #DDD;border-radius:100px;padding:5px 13px;font-size:12px;font-weight:700;color:var(--ink-soft);display:flex;align-items:center;gap:6px;box-shadow:var(--shadow)}
+.ap .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-or{background:var(--orange)}.dot-tl{background:var(--teal)}.dot-am{background:var(--amber)}.dot-gn{background:var(--green-dark)}.dot-rd{background:var(--red)}
+.ap .val{color:var(--ink);font-weight:800}
+.sb-green{background:var(--green-light);border-left:4px solid var(--green-dark)}
+.sb-amber{background:var(--amber-light);border-left:4px solid var(--amber)}
+.sb-orange{background:var(--orange-light);border-left:4px solid var(--orange)}
+.sb-red{background:var(--red-light);border-left:4px solid var(--red)}
+.sbox{border-radius:8px;padding:11px 13px}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-logo"><span>🌶</span> ChilliFarm Ballari</a>
+    <nav class="site-nav">
+      <a href="index.html">Dashboard</a>
+      <a href="charts.html" class="active">Price Charts</a>
+      <a href="calculator.html">Profit Calculator</a>
+    </nav>
+  </div>
+</header>
+
+<div class="live-ticker">
+  <div class="live-dot"></div>
+  <span class="ticker-label">APMC</span>
+  <span class="ticker-item">Sindhanur: <span class="ticker-price" id="t-sindhanur">—</span></span>
+  <span class="ticker-item">Hubli: <span class="ticker-price" id="t-hubli">—</span></span>
+  <span class="ticker-item">2043: <span class="ticker-price" id="t-2043">—</span></span>
+  <span class="ticker-item">5531: <span class="ticker-price" id="t-5531">—</span></span>
+  <span class="ticker-updated" id="t-updated">Loading…</span>
+</div>
+
+<div class="page-hero">
+  <div class="hero-badge">📉 Quarterly Price History · 2021–2026</div>
+  <h1>5-Year Price Charts</h1>
+  <p>Syngenta 2043 &amp; 5531 · Every 3 months · Verified APMC data · Karnataka markets</p>
+</div>
+
+<div class="container"><div class="content">
+
+<div class="anchor-banner">
+  <div class="ap"><div class="dot dot-or"></div>Feb '23: 2043 ≈ <span class="val">₹18,000/Q</span></div>
+  <div class="ap"><div class="dot dot-tl"></div>Feb '23: 5531 = <span class="val">₹22,000/Q</span> ⭐ SpiceExtra</div>
+  <div class="ap"><div class="dot dot-tl"></div>Feb '24: 5531 = <span class="val">₹15,000/Q</span> ⭐ SpiceExtra</div>
+  <div class="ap"><div class="dot dot-rd"></div>Aug '25 trough: <span class="val">₹7,000/Q</span> (KisanDeals)</div>
+  <div class="ap"><div class="dot dot-am"></div>Mar '26 today: <span class="val">₹13,300/Q</span> (KRAMA)</div>
+  <div class="ap"><div class="dot dot-gn"></div>5531 always <span class="val">5–15% above</span> 2043</div>
+</div>
+
+<div class="stat-grid" style="margin-bottom:20px">
+  <div class="stat-card orange"><div class="sc-label">2043 — 5yr Peak (Q1 2023)</div><div class="sc-val">₹18,000</div><div class="sc-sub">Jan–Mar 2023</div></div>
+  <div class="stat-card teal"><div class="sc-label">5531 — 5yr Peak ⭐</div><div class="sc-val">₹22,000</div><div class="sc-sub">Jan–Mar 2023 (SpiceExtra)</div></div>
+  <div class="stat-card red"><div class="sc-label">5yr Low (Both)</div><div class="sc-val">₹6,000–7,000</div><div class="sc-sub">Q3 2021 &amp; Q3 2025</div></div>
+  <div class="stat-card amber"><div class="sc-label">5yr Avg (2043)</div><div class="sc-val" id="avg2043">₹—</div><div class="sc-sub">All 21 quarters</div></div>
+  <div class="stat-card green"><div class="sc-label">Best Sell Month</div><div class="sc-val">January</div><div class="sc-sub">Q1 always peaks — plan here</div></div>
+</div>
+
+<!-- CHART 1 COMBINED -->
+<div class="card">
+  <div class="card-header green"><span class="icon">📈</span><h2>Combined — 2043 vs 5531 (Every 3 Months, 2021–2026)</h2><span class="sub">⭐ = real confirmed data · Hover for details</span></div>
+  <div class="card-body">
+    <div class="toggle-row">
+      <span class="toggle-lbl">Show:</span>
+      <button class="toggle-btn or" id="btn-2043" onclick="toggleSeries(0,'btn-2043','or')">Syngenta 2043</button>
+      <button class="toggle-btn teal" id="btn-5531" onclick="toggleSeries(1,'btn-5531','teal')">Syngenta 5531</button>
+      <button class="toggle-btn gn" onclick="showBoth()">Both Together</button>
+    </div>
+    <div class="chart-wrap tall"><canvas id="combinedChart"></canvas></div>
+    <p style="font-size:11px;color:var(--ink-soft);text-align:center;margin-top:8px">🟡 Large markers = confirmed real APMC prices &nbsp;|&nbsp; Small markers = seasonal estimate &nbsp;|&nbsp; Hover/tap for details</p>
+  </div>
+</div>
+
+<!-- CHARTS 2+3 SIDE BY SIDE -->
+<div class="split-grid">
+  <div class="card" style="margin-bottom:0">
+    <div class="card-header orange"><span class="icon">🌶</span><h2>Syngenta 2043</h2><span class="sub">Colour / Oleoresin</span></div>
+    <div class="card-body"><div class="chart-wrap"><canvas id="chart2043"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-bottom:0">
+    <div class="card-header teal"><span class="icon">🌿</span><h2>Syngenta 5531</h2><span class="sub">Colour + Pungency</span></div>
+    <div class="card-body"><div class="chart-wrap"><canvas id="chart5531"></canvas></div></div>
+  </div>
+</div>
+<p style="margin:8px 0 20px;font-size:11.5px;color:var(--ink-soft);text-align:center">↑ Individual charts with filled areas for easier reading. 5531 consistently trades above 2043.</p>
+
+<!-- CHART 4 YOY BAR -->
+<div class="card">
+  <div class="card-header blue"><span class="icon">📊</span><h2>Year-on-Year — Peak Season Price (January each year)</h2><span class="sub">Q1 Jan–Mar = best selling window</span></div>
+  <div class="card-body">
+    <div class="chart-wrap"><canvas id="yoyChart"></canvas></div>
+    <div class="insight-grid">
+      <div class="insight-card green"><div class="insight-title">📈 2021→2023: Bull Run (+90%)</div><div class="insight-body">Reduced arrivals + oleoresin export surge drove 2043 from ₹9,500→₹18,000 and 5531 to ₹22,000. SpiceExtra confirmed lower arrivals caused Q1 2023 peak.</div></div>
+      <div class="insight-card red"><div class="insight-title">📉 2023→2024: Crash (−25 to −32%)</div><div class="insight-body">SpiceExtra confirmed: Feb 2024 arrivals +100% vs prev year. Farmers who planted extra after 2023 highs caused their own price crash. 5531 fell ₹22K→₹15K.</div></div>
+      <div class="insight-card amber"><div class="insight-title">⚠️ 2025: Deepest Trough</div><div class="insight-body">Bumper AP/TG crop. 2043 touched ₹7,000/Q off-season (Aug 2025, KisanDeals). Even Q1 2025 was only ₹13,000 — near breakeven at ₹90K/acre costs.</div></div>
+      <div class="insight-card green"><div class="insight-title">🔮 2026: Recovery Underway</div><div class="insight-body">Q1 2026 Sindhanur peak: ₹24,100 (Feb 11). Area reduction starting. Cold stock low. Base prediction Q1 2027: ₹16,000–22,000 for 2043 (+39% from today).</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHART 5 SEASONAL -->
+<div class="card">
+  <div class="card-header green"><span class="icon">🔄</span><h2>Seasonal Price Cycle — 5-Year Average by Quarter</h2><span class="sub">Which 3 months gives best price?</span></div>
+  <div class="card-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center" class="split-grid">
+      <div class="chart-wrap short"><canvas id="seasonChart"></canvas></div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="sbox sb-green"><strong>🟢 Q1 (Jan–Mar) — SELL HERE</strong><br><span style="font-size:12px;color:var(--ink-soft)">Peak prices every year. Sell 40–50% of crop in January.</span></div>
+        <div class="sbox sb-amber"><strong>🟡 Q4 (Oct–Dec) — GOOD</strong><br><span style="font-size:12px;color:var(--ink-soft)">Pre-harvest recovery. Sell green chilli / first dry pickings here.</span></div>
+        <div class="sbox sb-orange"><strong>🟠 Q2 (Apr–Jun) — AVERAGE</strong><br><span style="font-size:12px;color:var(--ink-soft)">Arrivals flood market and prices fall. Sell early in this window.</span></div>
+        <div class="sbox sb-red"><strong>🔴 Q3 (Jul–Sep) — WORST</strong><br><span style="font-size:12px;color:var(--ink-soft)">Off-season lows. Use cold storage if possible. 2043 touched ₹7,000 here in 2025.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DATA TABLE -->
+<div class="card">
+  <div class="card-header blue"><span class="icon">🗃️</span><h2>Complete Quarterly Data Table — 2021 to Q1 2026</h2><span class="sub">⭐ Rows = confirmed real data</span></div>
+  <div class="card-body">
+    <div style="overflow-x:auto">
+      <table class="data-table"><thead><tr>
+        <th>Quarter</th>
+        <th style="color:#FFAB76">2043 Price</th><th>QoQ</th>
+        <th style="color:#80DEEA">5531 Price</th><th>QoQ</th>
+        <th>5531 Premium</th><th>Season</th>
+      </tr></thead><tbody id="table-body"></tbody></table>
+    </div>
+    <p style="font-size:11px;color:var(--ink-soft);margin-top:8px">⭐ = confirmed APMC price &nbsp;|&nbsp; Others = seasonal pattern estimate &nbsp;|&nbsp; Prices in ₹ per Quintal (100 kg)</p>
+  </div>
+</div>
+
+</div></div>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div><h3>🌶 ChilliFarm Ballari</h3>Anchored to SpiceExtra Karnataka Reports (Feb 2023, 2024), KisanDeals APMC data, and KRAMA portal. Non-anchor quarters estimated from seasonal index.</div>
+    <div><h3>Quick Links</h3><a href="index.html">Dashboard</a> · <a href="calculator.html">Profit Calculator</a><br><a href="https://krama.karnataka.gov.in" target="_blank" rel="noopener">KRAMA Portal</a> · <a href="https://agmarknet.gov.in" target="_blank" rel="noopener">Agmarknet</a></div>
+  </div>
+  <div class="footer-copy">Made with ❤️ for a Ballari chilli farmer | March 2026</div>
+</footer>
+
+<script src="assets/js/live-data.js"></script>
+<script>
+Chart.defaults.font.family = "'Nunito', sans-serif";
+Chart.defaults.plugins.tooltip.backgroundColor = "#1A1A1A";
+Chart.defaults.plugins.tooltip.titleColor = "#FFF";
+Chart.defaults.plugins.tooltip.bodyColor = "rgba(255,255,255,0.8)";
+Chart.defaults.plugins.tooltip.cornerRadius = 8;
+Chart.defaults.plugins.tooltip.padding = 10;
+
+const OR="#E8601C", TL="#006064";
+const Q = QUARTERLY_DATA;
+
+function ptBg(base){ return Q.p2043.map((_,i)=>Q.confirmedAnchors.has(i)?"#F0A500":base); }
+function ptR()     { return Q.p2043.map((_,i)=>Q.confirmedAnchors.has(i)?8:4); }
+
+document.getElementById("avg2043").textContent =
+  "₹"+Math.round(Q.p2043.reduce((a,b)=>a+b,0)/Q.p2043.length).toLocaleString("en-IN");
+
+const tooltipCallbacks = {
+  title: items => Q.fullLabels[items[0].dataIndex],
+  label: item => ` ${item.dataset.label||""}: ₹${item.raw.toLocaleString("en-IN")}${Q.confirmedAnchors.has(item.dataIndex)?" ⭐ Confirmed":""}`,
+  afterBody: items => {
+    const i = items[0].dataIndex;
+    const diff = Q.p5531[i]-Q.p2043[i];
+    return [`5531 premium: ₹${diff.toLocaleString("en-IN")} (+${((diff/Q.p2043[i])*100).toFixed(1)}%)`,`Season: ${Q.seasons[i%4]}`];
+  }
+};
+
+// CHART 1: COMBINED
+const cmbChart = new Chart(document.getElementById("combinedChart").getContext("2d"),{
+  type:"line",
+  data:{labels:Q.quarters,datasets:[
+    {label:"Syngenta 2043 (₹/Q)",data:Q.p2043,borderColor:OR,backgroundColor:"rgba(232,96,28,0.07)",borderWidth:2.5,fill:false,tension:0.4,pointBackgroundColor:ptBg(OR),pointBorderColor:"#FFF",pointBorderWidth:2,pointRadius:ptR(),pointHoverRadius:9},
+    {label:"Syngenta 5531 (₹/Q)",data:Q.p5531,borderColor:TL,backgroundColor:"rgba(0,96,100,0.07)",borderWidth:2.5,fill:false,tension:0.4,pointBackgroundColor:ptBg(TL),pointBorderColor:"#FFF",pointBorderWidth:2,pointRadius:ptR(),pointHoverRadius:9}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+    plugins:{legend:{position:"top",labels:{font:{size:12,weight:"700"},padding:16,usePointStyle:true}},tooltip:{callbacks:tooltipCallbacks}},
+    scales:{
+      x:{grid:{color:"rgba(0,0,0,0.04)"},ticks:{font:{size:10,weight:"600"},maxRotation:45}},
+      y:{min:4000,grid:{color:"rgba(0,0,0,0.05)"},ticks:{font:{size:10},callback:v=>"₹"+(v/1000).toFixed(0)+"K"},title:{display:true,text:"₹ per Quintal",font:{size:11,weight:"700"}}}
+    }
+  }
+});
+
+// CHART 2: 2043 solo
+new Chart(document.getElementById("chart2043").getContext("2d"),{
+  type:"line",
+  data:{labels:Q.quarters,datasets:[{label:"Syngenta 2043",data:Q.p2043,borderColor:OR,backgroundColor:"rgba(232,96,28,0.1)",borderWidth:2.5,fill:true,tension:0.4,pointBackgroundColor:ptBg(OR),pointBorderColor:"#FFF",pointBorderWidth:2,pointRadius:ptR()}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:i=>Q.fullLabels[i[0].dataIndex],label:i=>` ₹${i.raw.toLocaleString("en-IN")}/Q${Q.confirmedAnchors.has(i.dataIndex)?" ⭐":""}`,afterLabel:i=>` ${Q.seasons[i.dataIndex%4]}`}}},
+    scales:{x:{ticks:{font:{size:9},maxRotation:45},grid:{color:"rgba(0,0,0,0.03)"}},y:{min:4000,ticks:{font:{size:9},callback:v=>"₹"+(v/1000).toFixed(0)+"K"}}}}
+});
+
+// CHART 3: 5531 solo
+new Chart(document.getElementById("chart5531").getContext("2d"),{
+  type:"line",
+  data:{labels:Q.quarters,datasets:[{label:"Syngenta 5531",data:Q.p5531,borderColor:TL,backgroundColor:"rgba(0,96,100,0.1)",borderWidth:2.5,fill:true,tension:0.4,pointBackgroundColor:ptBg(TL),pointBorderColor:"#FFF",pointBorderWidth:2,pointRadius:ptR()}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:i=>Q.fullLabels[i[0].dataIndex],label:i=>` ₹${i.raw.toLocaleString("en-IN")}/Q${Q.confirmedAnchors.has(i.dataIndex)?" ⭐":""}`,afterLabel:i=>` ${Q.seasons[i.dataIndex%4]}`}}},
+    scales:{x:{ticks:{font:{size:9},maxRotation:45},grid:{color:"rgba(0,0,0,0.03)"}},y:{min:4000,ticks:{font:{size:9},callback:v=>"₹"+(v/1000).toFixed(0)+"K"}}}}
+});
+
+// CHART 4: YoY bar
+new Chart(document.getElementById("yoyChart").getContext("2d"),{
+  type:"bar",
+  data:{labels:Q.yoyYears,datasets:[
+    {label:"Syngenta 2043 — Jan Peak",data:Q.yoy2043,backgroundColor:"rgba(232,96,28,0.78)",borderColor:OR,borderWidth:2,borderRadius:6,borderSkipped:false},
+    {label:"Syngenta 5531 — Jan Peak",data:Q.yoy5531,backgroundColor:"rgba(0,96,100,0.78)",borderColor:TL,borderWidth:2,borderRadius:6,borderSkipped:false}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:"top",labels:{font:{size:12,weight:"700"},padding:14}},tooltip:{callbacks:{label:i=>` ${i.dataset.label}: ₹${i.raw.toLocaleString("en-IN")}/Q`}}},
+    scales:{x:{ticks:{font:{size:11,weight:"700"}},grid:{display:false}},y:{ticks:{font:{size:10},callback:v=>"₹"+(v/1000).toFixed(0)+"K"},grid:{color:"rgba(0,0,0,0.05)"}}}}
+});
+
+// CHART 5: Seasonal average
+new Chart(document.getElementById("seasonChart").getContext("2d"),{
+  type:"bar",
+  data:{labels:["Q1\nJan–Mar","Q2\nApr–Jun","Q3\nJul–Sep","Q4\nOct–Dec"],datasets:[
+    {label:"2043 Avg",data:Q.seasonal2043,backgroundColor:["rgba(232,96,28,0.85)","rgba(232,96,28,0.5)","rgba(192,57,43,0.45)","rgba(232,96,28,0.65)"],borderColor:OR,borderWidth:2,borderRadius:5,borderSkipped:false},
+    {label:"5531 Avg",data:Q.seasonal5531,backgroundColor:["rgba(0,96,100,0.85)","rgba(0,96,100,0.5)","rgba(0,96,100,0.4)","rgba(0,96,100,0.65)"],borderColor:TL,borderWidth:2,borderRadius:5,borderSkipped:false}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:"top",labels:{font:{size:11,weight:"700"}}},tooltip:{callbacks:{label:i=>` ${i.dataset.label}: ₹${i.raw.toLocaleString("en-IN")}/Q (5yr avg)`}}},
+    scales:{x:{ticks:{font:{size:10,weight:"700"}},grid:{display:false}},y:{ticks:{font:{size:10},callback:v=>"₹"+(v/1000).toFixed(0)+"K"}}}}
+});
+
+// DATA TABLE
+const tbody = document.getElementById("table-body");
+Q.p2043.forEach((v2,i)=>{
+  const v5=Q.p5531[i];
+  const p2=i>0?Q.p2043[i-1]:null, p5=i>0?Q.p5531[i-1]:null;
+  const c2=p2?((v2-p2)/p2*100).toFixed(1):null, c5=p5?((v5-p5)/p5*100).toFixed(1):null;
+  const prem=((v5-v2)/v2*100).toFixed(1);
+  const isQ1=i%4===0, isAnch=Q.confirmedAnchors.has(i);
+  const cc=x=>x?(parseFloat(x)>0?"up":parseFloat(x)<0?"down":"flat"):"";
+  const arrow=x=>x?(parseFloat(x)>0?"▲":"▼")+Math.abs(x)+"%":"—";
+  const tr=document.createElement("tr");
+  if(isQ1) tr.classList.add("q1-row");
+  if(isAnch) tr.classList.add("anch");
+  tr.innerHTML=`
+    <td>${Q.fullLabels[i]}</td>
+    <td style="color:#E8601C;font-weight:700">₹${v2.toLocaleString("en-IN")}</td>
+    <td class="${cc(c2)}">${arrow(c2)}</td>
+    <td style="color:#006064;font-weight:700">₹${v5.toLocaleString("en-IN")}</td>
+    <td class="${cc(c5)}">${arrow(c5)}</td>
+    <td style="color:#1E8449">+${prem}%</td>
+    <td style="font-size:11px">${Q.seasons[i%4]}</td>`;
+  tbody.appendChild(tr);
+});
+
+// TOGGLES
+function toggleSeries(idx,btnId,cls){const meta=cmbChart.getDatasetMeta(idx);meta.hidden=!meta.hidden;cmbChart.update();document.getElementById(btnId).classList.toggle(cls);}
+function showBoth(){[0,1].forEach(i=>{cmbChart.getDatasetMeta(i).hidden=false;});cmbChart.update();document.getElementById("btn-2043").classList.add("or");document.getElementById("btn-5531").classList.add("teal");}
+
+// LIVE TICKER
+loadLiveData().then(renderTicker).catch(console.error);
+</script>
+</body>
+</html>
