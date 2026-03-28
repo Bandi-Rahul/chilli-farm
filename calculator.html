@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🧮 Profit Calculator — Syngenta 2043 & 5531 | ChilliFarm Ballari</title>
+<title>🧮 Profit Calculator - Syngenta 2043 & 5531 | ChilliFarm Ballari</title>
 <link rel="stylesheet" href="assets/css/style.css">
 <script src="data/prices.js"></script>
 <style>
@@ -45,16 +45,16 @@
 <div class="live-ticker">
   <div class="live-dot"></div>
   <span class="ticker-label">LIVE</span>
-  <span class="ticker-item">2043: <span class="ticker-price" id="t-2043">—</span></span>
-  <span class="ticker-item">5531: <span class="ticker-price" id="t-5531">—</span></span>
-  <span class="ticker-item">Sindhanur: <span class="ticker-price" id="t-sindhanur">—</span></span>
+  <span class="ticker-item">2043: <span class="ticker-price" id="t-2043">-</span></span>
+  <span class="ticker-item">5531: <span class="ticker-price" id="t-5531">-</span></span>
+  <span class="ticker-item">Sindhanur: <span class="ticker-price" id="t-sindhanur">-</span></span>
   <span class="ticker-updated" id="t-updated">Loading…</span>
 </div>
 
 <div class="page-hero">
   <div class="hero-badge">🧮 Farmer-Friendly Calculator</div>
   <h1>Chilli Profit Calculator</h1>
-  <p>Enter your numbers in the YELLOW boxes — profit calculates instantly | Syngenta 2043 &amp; 5531</p>
+  <p>Enter your numbers in the YELLOW boxes - profit calculates instantly | Syngenta 2043 &amp; 5531</p>
 </div>
 
 <div class="container"><div class="content">
@@ -65,7 +65,7 @@
 
 <!-- A: FARM DETAILS -->
 <div class="card">
-  <div class="card-header green"><span class="icon">🌱</span><h2>A — Your Farm Details</h2></div>
+  <div class="card-header green"><span class="icon">🌱</span><h2>A - Your Farm Details</h2></div>
   <div class="card-body">
     <div class="input-row">
       <div><div class="input-label">How many acres do you farm?</div><div class="input-hint">1 acre = 0.4 hectare. Enter 0.5, 1, 1.5, 2 etc.</div></div>
@@ -80,17 +80,17 @@
 
 <!-- B: COSTS -->
 <div class="card">
-  <div class="card-header blue"><span class="icon">💰</span><h2>B — Your Farming Costs (per acre)</h2><span class="sub">Change to YOUR actual costs</span></div>
+  <div class="card-header blue"><span class="icon">💰</span><h2>B - Your Farming Costs (per acre)</h2><span class="sub">Change to YOUR actual costs</span></div>
   <div class="card-body">
     <div class="callout amber" style="margin-bottom:14px;font-size:12.5px">💡 Defaults are typical Ballari averages. Change them to what <strong>you actually spent</strong>.</div>
     <div id="cost-rows"></div>
-    <div class="total-bar"><span class="total-bar-label">📊 TOTAL COST — YOUR FARM</span><span class="total-bar-val" id="display-total">₹0</span></div>
+    <div class="total-bar"><span class="total-bar-label">📊 TOTAL COST - YOUR FARM</span><span class="total-bar-val" id="display-total">₹0</span></div>
   </div>
 </div>
 
 <!-- C: YIELD & PRICE -->
 <div class="card">
-  <div class="card-header orange"><span class="icon">🌶</span><h2>C — Expected Yield &amp; Selling Price</h2></div>
+  <div class="card-header orange"><span class="icon">🌶</span><h2>C - Expected Yield &amp; Selling Price</h2></div>
   <div class="card-body">
     <div class="input-row">
       <div><div class="input-label">Expected Yield (quintals per acre)</div><div class="input-hint">1 quintal = 100 kg dry chilli. Irrigated: typical 12–20 qtl/acre.</div></div>
@@ -105,14 +105,14 @@
 
 <!-- D: RESULTS -->
 <div class="card">
-  <div class="card-header green"><span class="icon">✅</span><h2>D — Your Profit / Loss Result</h2><span class="sub">Auto-calculated</span></div>
+  <div class="card-header green"><span class="icon">✅</span><h2>D - Your Profit / Loss Result</h2><span class="sub">Auto-calculated</span></div>
   <div class="card-body">
     <div class="result-grid">
       <div class="result-card" style="background:var(--blue-light);border-color:#AED6F1"><div class="rc-label">💵 Gross Revenue</div><div class="rc-val" id="d-rev">₹0</div><div class="rc-sub" id="d-rev-sub">0 qtl × ₹0</div></div>
       <div class="result-card" style="background:var(--orange-light);border-color:#FABB7A"><div class="rc-label">📦 Total Cost</div><div class="rc-val" id="d-cost">₹0</div><div class="rc-sub" id="d-cost-sub">All inputs</div></div>
       <div class="result-card" style="background:var(--amber-light);border-color:#FFD54F"><div class="rc-label">📈 ROI %</div><div class="rc-val" id="d-roi">0%</div><div class="rc-sub">Return on investment</div></div>
       <div class="result-card" style="background:#F3E5F5;border-color:#CE93D8"><div class="rc-label">⚖️ Breakeven Price</div><div class="rc-val" id="d-bkevn">₹0/Q</div><div class="rc-sub">Min price to not lose</div></div>
-      <div class="result-profit result-card"><div class="rc-label">🌶 NET PROFIT / LOSS — YOUR FARM</div><div class="rc-val" id="d-profit">₹0</div><div class="rc-sub" id="d-profit-sub">Based on your inputs</div><div id="profit-badge"></div></div>
+      <div class="result-profit result-card"><div class="rc-label">🌶 NET PROFIT / LOSS - YOUR FARM</div><div class="rc-val" id="d-profit">₹0</div><div class="rc-sub" id="d-profit-sub">Based on your inputs</div><div id="profit-badge"></div></div>
     </div>
     <div style="margin-top:10px">
       <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--ink-soft);margin-bottom:3px"><span>Cost</span><span>Revenue vs Cost</span><span>Revenue</span></div>
@@ -124,7 +124,7 @@
 
 <!-- E: SCENARIOS -->
 <div class="card">
-  <div class="card-header" style="background:#4A235B"><span class="icon">📊</span><h2>E — 2026–27 Price Scenarios (Planning Reference)</h2></div>
+  <div class="card-header" style="background:#4A235B"><span class="icon">📊</span><h2>E - 2026–27 Price Scenarios (Planning Reference)</h2></div>
   <div class="card-body">
     <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:12px">Pre-set prediction scenarios. Your current input is highlighted in <span style="background:#FFFACD;padding:1px 5px;border-radius:3px;font-weight:700">yellow</span>. Cost assumed ₹90,000/acre.</p>
     <div class="sc-row hdr"><div>Scenario</div><div>Price/Q</div><div>Yield/acre</div><div>Revenue (farm)</div><div>Net Profit (farm)</div></div>
@@ -134,13 +134,13 @@
 
 <!-- F: TIPS -->
 <div class="card">
-  <div class="card-header green"><span class="icon">💡</span><h2>F — Tips for Best Price</h2></div>
+  <div class="card-header green"><span class="icon">💡</span><h2>F - Tips for Best Price</h2></div>
   <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
-    <div class="callout green" style="font-size:13px">🏪 <strong>Sell at Hubli Amaragol APMC</strong> — ₹5,000–10,000 more per quintal vs Sindhanur. Transport: ₹500–800/Q. Worth it for 10+ quintals.</div>
-    <div class="callout amber" style="font-size:13px">📅 <strong>Best window: January 2027</strong> — Sell 40–50% in January. Peak processor demand before Rabi stock arrives.</div>
-    <div class="callout orange" style="font-size:13px">❄️ <strong>Cold storage saves money</strong> — If price below ₹14,000/Q, store 2–3 months. Cost: ₹1,000–2,000/Q. Can gain ₹3,000–8,000 extra later.</div>
-    <div class="callout green" style="font-size:13px">🌿 <strong>Quality = Higher Price</strong> — Harvest red-ripe, sun-dry to 8–10% moisture. Quality 2043 gets ₹5,000–8,000 extra per quintal.</div>
-    <div class="callout amber" style="font-size:13px">📱 <strong>Check KRAMA daily</strong> — Visit krama.karnataka.gov.in before deciding to sell. Don't trust trader's word alone.</div>
+    <div class="callout green" style="font-size:13px">🏪 <strong>Sell at Hubli Amaragol APMC</strong> - ₹5,000–10,000 more per quintal vs Sindhanur. Transport: ₹500–800/Q. Worth it for 10+ quintals.</div>
+    <div class="callout amber" style="font-size:13px">📅 <strong>Best window: January 2027</strong> - Sell 40–50% in January. Peak processor demand before Rabi stock arrives.</div>
+    <div class="callout orange" style="font-size:13px">❄️ <strong>Cold storage saves money</strong> - If price below ₹14,000/Q, store 2–3 months. Cost: ₹1,000–2,000/Q. Can gain ₹3,000–8,000 extra later.</div>
+    <div class="callout green" style="font-size:13px">🌿 <strong>Quality = Higher Price</strong> - Harvest red-ripe, sun-dry to 8–10% moisture. Quality 2043 gets ₹5,000–8,000 extra per quintal.</div>
+    <div class="callout amber" style="font-size:13px">📱 <strong>Check KRAMA daily</strong> - Visit krama.karnataka.gov.in before deciding to sell. Don't trust trader's word alone.</div>
   </div>
 </div>
 
@@ -258,9 +258,9 @@ function calc() {
   else{profEl.style.background="var(--amber-light)";profEl.style.borderColor="var(--amber)";profVal.style.color="var(--amber)";}
 
   document.getElementById("profit-badge").innerHTML = profit>0
-    ? '<div class="profit-status ps-ok">✅ PROFIT — You are making money!</div>'
-    : profit===0 ? '<div class="profit-status ps-warn">⚖️ BREAKEVEN — No profit, no loss</div>'
-    : '<div class="profit-status ps-loss">❌ LOSS — Review your numbers</div>';
+    ? '<div class="profit-status ps-ok">✅ PROFIT - You are making money!</div>'
+    : profit===0 ? '<div class="profit-status ps-warn">⚖️ BREAKEVEN - No profit, no loss</div>'
+    : '<div class="profit-status ps-loss">❌ LOSS - Review your numbers</div>';
 
   const maxV=Math.max(rev,total)*1.1||1, pct=Math.min(rev/maxV*100,100);
   const m=document.getElementById("meter");
