@@ -1,4 +1,4 @@
-# 🌶 ChilliFarm Ballari — Chilli Farmer Dashboard
+# 🌶 ChilliFarm Ballari - Chilli Farmer Dashboard
 
 A free, open-source website for **chilli farmers in Ballari (Bellary), Karnataka**, India.  
 Built for **Syngenta 2043 and 5531** hybrid variety growers.
@@ -12,14 +12,14 @@ Built for **Syngenta 2043 and 5531** hybrid variety growers.
 | Page | What It Shows |
 |---|---|
 | **Dashboard** (`index.html`) | Live APMC prices, market trend, quick links |
-| **Price Charts** (`charts.html`) | 5 interactive charts — every 3 months from 2021 to 2026 |
+| **Price Charts** (`charts.html`) | 5 interactive charts - every 3 months from 2021 to 2026 |
 | **Profit Calculator** (`calculator.html`) | Enter your farm size, costs, yield → instant profit/loss |
 
 ### Live Price Data (Auto-Updated Daily)
 - Fetched every day from **KRAMA Karnataka government portal** and **Agmarknet (data.gov.in)**
 - Saved to `data/live-prices.json`
 - Updated by **GitHub Actions** at 8:30 AM IST and 3:30 PM IST
-- No hosting costs — all free with GitHub Pages + Actions
+- No hosting costs - all free with GitHub Pages + Actions
 
 ---
 
@@ -85,7 +85,7 @@ The file `.github/workflows/fetch-prices.yml` tells GitHub to automatically run 
 6. Commits and pushes the updated file to GitHub
 7. Your website automatically shows the new prices
 
-**No cost** — GitHub gives 2,000 free Actions minutes per month. This scraper uses about 10 minutes per month.
+**No cost** - GitHub gives 2,000 free Actions minutes per month. This scraper uses about 10 minutes per month.
 
 ---
 
@@ -123,7 +123,7 @@ To update the historical price data, edit `assets/js/chart-data.js` and update t
 
 ## ⚠️ Disclaimer
 
-This website is for **planning and education purposes only**. Actual APMC prices may differ. Always verify prices on the official KRAMA portal before making selling decisions. The profit predictions are based on historical data and market analysis — they are not guaranteed.
+This website is for **planning and education purposes only**. Actual APMC prices may differ. Always verify prices on the official KRAMA portal before making selling decisions. The profit predictions are based on historical data and market analysis - they are not guaranteed.
 
 ---
 
