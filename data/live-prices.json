@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-03-27",
-  "fetch_status": "seed_data",
-  "note": "Auto-updated daily by GitHub Actions. Prices from KRAMA Karnataka APMC portal + Agmarknet.",
+  "last_updated": "2026-03-28",
+  "fetch_status": "fallback",
+  "note": "Auto-updated daily by GitHub Actions at 8:30 AM IST.",
   "markets": [
     {
       "market": "Sindhanur APMC",
@@ -11,49 +11,39 @@
       "modal_price": 13300,
       "max_price": 13300,
       "date": "2026-03-25",
-      "unit": "INR per Quintal"
+      "unit": "INR per Quintal",
+      "source": "fallback"
     },
     {
       "market": "Hubli Amaragol APMC",
       "district": "Dharwad",
-      "variety": "Dry Chillies (Byadgi Premium)",
+      "variety": "Dry Chillies (Byadgi)",
       "min_price": 2400,
       "modal_price": 27501,
       "max_price": 48399,
       "date": "2026-03-23",
-      "unit": "INR per Quintal"
-    },
-    {
-      "market": "Mangalore APMC",
-      "district": "Dakshina Kannada",
-      "variety": "Dry Chillies",
-      "min_price": 19000,
-      "modal_price": 20000,
-      "max_price": 25000,
-      "date": "2026-03-24",
-      "unit": "INR per Quintal"
+      "unit": "INR per Quintal",
+      "source": "fallback"
     }
   ],
   "summary": {
     "hybrid_modal_today": 13300,
     "byadgi_modal_today": 27501,
-    "season_peak_2026": 39207,
-    "season_peak_date": "2026-02-24",
     "trend": "declining",
-    "trend_note": "Late-harvest period. Peak was Feb 2026. Recovery expected Oct–Nov 2026 for next crop."
+    "trend_note": "Below-average. Hold stock if possible, or sell best lots now."
   },
   "variety_estimates": {
     "syngenta_2043": {
       "estimated_modal": 13300,
-      "range_low": 7300,
-      "range_high": 20000,
-      "note": "Tracks Sindhanur APMC generic hybrid price"
+      "range_low": 8645,
+      "range_high": 19285,
+      "note": "Tracks Sindhanur APMC generic hybrid price. Higher ASTA colour."
     },
     "syngenta_5531": {
-      "estimated_modal": 14000,
-      "range_low": 8000,
-      "range_high": 22000,
-      "note": "5-10% premium over 2043 due to masala+colour dual appeal"
+      "estimated_modal": 14231,
+      "range_low": 9310,
+      "range_high": 20615,
+      "note": "5-10% premium over 2043 due to dual colour+pungency appeal."
     }
   }
 }
